@@ -1,0 +1,87 @@
+.main {
+  padding: var(--spacing-l);
+  max-width: var(--width-max);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: calc(-1 * var(--spacing-xl));
+  background: var(--colour-background-white);
+  border-radius: var(--border-radius-l);
+  box-shadow: var(--box-shadow);
+}
+
+.feature-card {
+  /* Card layout tuned to the reference feature composition */
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+  padding: var(--spacing-xxl) var(--spacing-xl);
+  text-align: left;
+}
+
+.feature-card__top {
+  /* Two-column hero row */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xl);
+}
+
+.feature-card__content {
+  flex: 1;
+}
+
+.feature-card__visual {
+  flex: 1;
+}
+
+.feature-card__image-holder {
+  /* Large placeholder for hero visual */
+  width: 100%;
+  min-height: 240px;
+  background: #d9d9d9;
+  border-radius: var(--border-radius-m);
+}
+
+.feature-card__divider {
+  height: 1px;
+  background: var(--colour-background-light);
+}
+
+.feature-card__bottom {
+  /* Side-by-side CTAs */
+  display: flex;
+  gap: var(--spacing-xl);
+  justify-content: space-between;
+  text-align: center;
+}
+
+.feature-card__column {
+  flex: 1;
+}
+
+.feature-card__text {
+  margin-bottom: var(--spacing-m);
+}
+
+.feature-card__mini-image {
+  /* Placeholder for bottom card visuals */
+  width: 100%;
+  height: 140px;
+  margin-bottom: var(--spacing-m);
+  background: #d9d9d9;
+  border-radius: var(--border-radius-m);
+}
+
+@media (max-width: 700px) {
+  .feature-card {
+    /* More compact padding on small screens */
+    padding: var(--spacing-xl) var(--spacing-l);
+  }
+
+  .feature-card__top,
+  .feature-card__bottom {
+    /* Stack columns for mobile */
+    flex-direction: column;
+    text-align: center;
+  }
+}

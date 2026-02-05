@@ -1,0 +1,43 @@
+.buttons {
+  display: flex;
+  gap: var(--spacing-l);
+  align-items: center;
+}
+
+.button {
+  padding: var(--spacing-s) var(--spacing-m);
+  border-radius: var(--border-radius-s);
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.button:disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.button--primary {
+  /* Unified black button treatment */
+  border: 1px solid var(--colour-background-dark);
+  background: var(--colour-background-dark);
+  color: var(--colour-text-light);
+}
+
+.button--primary:hover {
+  /* Subtle lift without color inversion */
+  background: #111;
+  color: var(--colour-text-light);
+}
+
+.button--secondary {
+  /* Secondary matches primary for a strict, minimal look */
+  background: var(--colour-background-dark);
+  border: 1px solid var(--colour-background-dark);
+  color: var(--colour-text-light);
+}
+
+.button--secondary:hover {
+  /* Maintain monochrome hover state */
+  background: #111;
+  border-color: #111;
+}
