@@ -12,6 +12,8 @@
   padding-left: max(var(--spacing-l), calc((100vw - var(--width-max)) / 2));
   padding-right: max(var(--spacing-l), calc((100vw - var(--width-max)) / 2));
   position: relative;
+  border-top: 1px solid black;
+  color: rgb(175, 175, 175);
 }
 
 .footer > * {
@@ -107,5 +109,5 @@
 }
 .footer__link {
   text-decoration: none;
-  color:black;
+ color: rgb(175, 175, 175);
 }
