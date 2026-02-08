@@ -12,8 +12,9 @@
   padding-left: max(var(--spacing-l), calc((100vw - var(--width-max)) / 2));
   padding-right: max(var(--spacing-l), calc((100vw - var(--width-max)) / 2));
   position: relative;
-  border-top: 1px solid black;
+  /*border-top: rgb(71, 71, 71); why you no catch catch d colour (¬__¬)*/
   color: rgb(175, 175, 175);
+  background-color: rgb(250, 249, 249);
 }
 
 .footer > * {

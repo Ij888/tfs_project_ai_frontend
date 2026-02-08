@@ -3,6 +3,9 @@ class Shop {
   apiTeam = "handyman";
   defaultSort = "title";
   searchDelayMs = 350;
+  pageSize = 3;
+  currentPage = 1;
+  allProducts = [];
 
   constructor() {
     this.searchContainer = document.querySelector(".search");
@@ -18,6 +21,9 @@ class Shop {
       this.productsContainer = document.querySelector(".products");
       this.productsList =
         this.productsContainer.querySelector(".products__list");
+      this.showMoreButton = this.productsContainer.querySelector(
+        ".products__show-more .button"
+      );
     }
   }
 
@@ -26,6 +32,7 @@ class Shop {
     this.searchInput.addEventListener("input", (e) => this.checkInput(e));
     this.searchInput.addEventListener("input", (e) => this.searchOnType(e));
     this.searchButton.addEventListener("click", (e) => this.search(e));
+    this.showMoreButton.addEventListener("click", (e) => this.showMore(e));
     this.checkInput();
     this.search();
   }
@@ -49,6 +56,8 @@ class Shop {
     this.loading.classList.add("is-loading");
     this.productsContainer.classList.remove("is-shown");
     this.searchResultCount.textContent = "";
+    this.currentPage = 1;
+    this.allProducts = [];
 
     while (this.productsList.firstChild) {
       this.productsList.removeChild(this.productsList.lastChild);
@@ -80,6 +89,7 @@ class Shop {
 
   processProducts(data) {
     const products = Array.isArray(data?.products) ? data.products : [];
+    this.allProducts = products;
 
     this.searchResultCount.textContent = `${products.length} products found`;
 
@@ -89,14 +99,25 @@ class Shop {
       this.productsContainer.classList.remove("is-shown");
     }
 
-    products.forEach((product) => {
+    this.renderPage();
+  }
+
+  renderPage() {
+    const visibleCount = this.currentPage * this.pageSize;
+    const visibleProducts = this.allProducts.slice(0, visibleCount);
+
+    this.productsList.innerHTML = "";
+    visibleProducts.forEach((product) => {
       const productsItem = document.createElement("div");
       productsItem.classList.add("products__item");
       this.productsList.appendChild(productsItem);
 
       const productsItemImage = document.createElement("img");
       productsItemImage.classList.add("products__item-image");
-      productsItemImage.src = product.image;
+      const imagePath = product.image || "";
+      productsItemImage.src = imagePath.startsWith("http")
+        ? imagePath
+        : `${this.apiBaseUrl}${imagePath.startsWith("/") ? "" : "/"}${imagePath}`;
       productsItem.appendChild(productsItemImage);
 
       const productsItemTitle = document.createElement("h3");
@@ -119,6 +140,18 @@ class Shop {
       productsItemPrice.textContent = product.price;
       productsItem.appendChild(productsItemPrice);
     });
+
+    if (visibleCount >= this.allProducts.length) {
+      this.showMoreButton.parentElement.classList.remove("is-shown");
+    } else {
+      this.showMoreButton.parentElement.classList.add("is-shown");
+    }
+  }
+
+  showMore(event) {
+    event.preventDefault();
+    this.currentPage += 1;
+    this.renderPage();
   }
 }
 
