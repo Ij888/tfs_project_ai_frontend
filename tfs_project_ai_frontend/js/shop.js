@@ -1,4 +1,9 @@
 class Shop {
+  apiBaseUrl = "https://ai-project.technative.dev.f90.co.uk";
+  apiTeam = "handyman";
+  defaultSort = "title";
+  searchDelayMs = 350;
+
   constructor() {
     this.searchContainer = document.querySelector(".search");
     if (this.searchContainer) {
@@ -8,6 +13,7 @@ class Shop {
         ".search__result-count"
       );
       this.loading = this.searchContainer.querySelector(".search__loading");
+      this.searchTimeout = null;
 
       this.productsContainer = document.querySelector(".products");
       this.productsList =
@@ -18,6 +24,7 @@ class Shop {
   init() {
     if (!this.searchContainer) return;
     this.searchInput.addEventListener("input", (e) => this.checkInput(e));
+    this.searchInput.addEventListener("input", (e) => this.searchOnType(e));
     this.searchButton.addEventListener("click", (e) => this.search(e));
     this.checkInput();
     this.search();
@@ -25,6 +32,15 @@ class Shop {
 
   checkInput() {
     this.searchButton.disabled = this.searchInput.value.length === 0;
+  }
+
+  searchOnType(event) {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+    this.searchTimeout = setTimeout(() => {
+      this.search(event);
+    }, this.searchDelayMs);
   }
 
   async search(e) {
@@ -38,48 +54,49 @@ class Shop {
       this.productsList.removeChild(this.productsList.lastChild);
     }
 
-    const url = "../js/fake-products.json";
     try {
+      // Real API call (replaces the previous mock JSON fetch)
+      const searchTerm = this.searchInput.value.trim();
+      const params = new URLSearchParams();
+      if (searchTerm.length > 0) {
+        params.set("query", searchTerm);
+      }
+      params.set("sort", this.defaultSort);
+      // Builds: https://ai-project.technative.dev.f90.co.uk/products/{team}?query=...&sort=...
+      const url = `${this.apiBaseUrl}/products/${this.apiTeam}?${params.toString()}`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
 
-      await setTimeout(async () => {
-        const json = await response.json();
-        this.processProducts(json);
-        this.loading.classList.remove("is-loading");
-      }, 1000);
+      const json = await response.json();
+      this.processProducts(json);
     } catch (error) {
       console.error(error.message);
+    } finally {
       this.loading.classList.remove("is-loading");
     }
   }
 
   processProducts(data) {
-    const searchTerm = this.searchInput.value.toLowerCase();
-    const filteredProducts = data.filter(
-      (product) =>
-        product.title.toLowerCase().includes(searchTerm) ||
-        product.description.toLowerCase().includes(searchTerm)
-    );
+    const products = Array.isArray(data?.products) ? data.products : [];
 
-    this.searchResultCount.textContent = `${filteredProducts.length} products found`;
+    this.searchResultCount.textContent = `${products.length} products found`;
 
-    if (filteredProducts.length > 0) {
+    if (products.length > 0) {
       this.productsContainer.classList.add("is-shown");
     } else {
       this.productsContainer.classList.remove("is-shown");
     }
 
-    filteredProducts.forEach((product) => {
+    products.forEach((product) => {
       const productsItem = document.createElement("div");
       productsItem.classList.add("products__item");
       this.productsList.appendChild(productsItem);
 
       const productsItemImage = document.createElement("img");
       productsItemImage.classList.add("products__item-image");
-      productsItemImage.src = product.img;
+      productsItemImage.src = product.image;
       productsItem.appendChild(productsItemImage);
 
       const productsItemTitle = document.createElement("h3");
