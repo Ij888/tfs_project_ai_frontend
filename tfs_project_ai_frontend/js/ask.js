@@ -1,5 +1,7 @@
 class Ask {
   maxLength = 160;
+  apiBaseUrl = "https://ai-project.technative.dev.f90.co.uk";
+  apiTeam = "handyman";
 
   constructor() {
     this.askContainer = document.querySelector(".ask");
@@ -66,36 +68,39 @@ class Ask {
     event.preventDefault();
     this.loading.classList.add("is-loading");
 
-    const url = "../js/fake-results.json";
     try {
+      // Real API call (replaces the previous mock JSON fetch)
+      const query = this.askInput.value.trim();
+      // Builds: https://ai-project.technative.dev.f90.co.uk/ai/{team}?query=...
+      const url = `${this.apiBaseUrl}/ai/${this.apiTeam}?query=${encodeURIComponent(
+        query
+      )}`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
 
-      // fake a one second wait, use the two lines below for an instant response
-      // const json = await response.json();
-      // this.processResults(json);
-
-      await setTimeout(async () => {
-        const json = await response.json();
-        this.processResults(json);
-        this.loading.classList.remove("is-loading");
-      }, 1000);
+      const json = await response.json();
+      this.processResults(json);
     } catch (error) {
       console.error(error.message);
+    } finally {
       this.loading.classList.remove("is-loading");
     }
   }
 
   processResults(data) {
-    if (data.length > 0) {
+    // Clear any mock/previous results before rendering the live API response
+    this.resultsList.innerHTML = "";
+    // API returns { results: [{ title, description }, ...] }
+    const results = Array.isArray(data?.results) ? data.results : [];
+    if (results.length > 0) {
       this.resultsContainer.classList.add("is-shown");
     } else {
       this.resultsContainer.classList.remove("is-shown");
     }
 
-    data.forEach((result) => {
+    results.forEach((result) => {
       const resultsItem = document.createElement("div");
       resultsItem.classList.add("results__item");
       this.resultsList.appendChild(resultsItem);
