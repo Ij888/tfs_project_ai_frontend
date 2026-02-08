@@ -5,8 +5,105 @@
   align-items: center;
   margin-left: auto;
   margin-right: auto;
-  max-width: var(--width-max);
+  width: 100%;
+  max-width: none;
   padding: var(--spacing-l);
+  padding-bottom: calc(20.86vw + 50px);
+  padding-left: max(var(--spacing-l), calc((100vw - var(--width-max)) / 2));
+  padding-right: max(var(--spacing-l), calc((100vw - var(--width-max)) / 2));
+  position: relative;
+}
+
+.footer > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* 20px blueprint strip spanning the full viewport width */
+.footer::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 100%;
+  transform: translateX(-50%);
+  height: 25px;
+  background-color: #000;
+  background-image: repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.08) 1px,
+      transparent 1px,
+      transparent 24px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.08) 1px,
+      transparent 1px,
+      transparent 24px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.22),
+      rgba(255, 255, 255, 0.22) 2px,
+      transparent 2px,
+      transparent 160px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.22),
+      rgba(255, 255, 255, 0.22) 2px,
+      transparent 2px,
+      transparent 160px
+    ),
+    linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.12) 0,
+      rgba(255, 255, 255, 0.12) 1px,
+      transparent 1px,
+      transparent 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.12) 0,
+      rgba(255, 255, 255, 0.12) 1px,
+      transparent 1px,
+      transparent 100%
+    );
+  pointer-events: none;
+}
+
+/* Large single logo watermark above the strip */
+.footer::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 25px;
+  width: 100%;
+  max-width: none;
+  transform: translateX(-50%);
+  height: 20.86vw;
+  background-color: rgba(145, 145, 145, 0.1);
+  -webkit-mask-image: url("../images/proper_logo.svg");
+  mask-image: url("../images/proper_logo.svg");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: 100% auto;
+  mask-size: 100% auto;
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .footer {
+    padding-bottom: calc(20.86vw + 50px);
+  }
+
+  .footer::before {
+    height: 20.86vw;
+  }
 }
 .footer__link {
   text-decoration: none;

@@ -9,6 +9,14 @@
   border-radius: var(--border-radius-s);
   cursor: pointer;
   transition: all 0.25s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-body);
+  line-height: 1;
+  font-weight: 600;
+  min-height: 40px;
 }
 
 .button:disabled {

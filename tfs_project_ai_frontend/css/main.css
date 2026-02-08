@@ -53,14 +53,22 @@
   gap: var(--spacing-xl);
   justify-content: space-between;
   text-align: center;
+  align-items: stretch;
 }
 
 .feature-card__column {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .feature-card__text {
   margin-bottom: var(--spacing-m);
+}
+
+.feature-card__column .button {
+  margin-top: auto;
 }
 
 .feature-card__mini-image {
